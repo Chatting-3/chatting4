@@ -24,12 +24,12 @@ public class EchoHandler extends TextWebSocketHandler {
 
 		
 		  Map<String,Object> map = session.getAttributes(); 
-		  String userId = (String)map.get("id"); 
-		  System.out.println("로그인 한 아이디 : " + userId);
+		  String userNickname = (String)map.get("nickname"); 
+		  System.out.println("로그인 한 유저 닉네임 : " + userNickname);
 		 
-
+		  
 		for (WebSocketSession sess : sessionList) {
-			sess.sendMessage(new TextMessage(userId + ": " + message.getPayload()));
+			sess.sendMessage(new TextMessage(userNickname + ": " + message.getPayload()));
 			System.out.println("message 교환");
 		}
 	}

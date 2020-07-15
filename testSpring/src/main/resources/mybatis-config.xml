@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+	<typeAliases>
+		<typeAlias type="com.yeoni.testSpring.Member.vo.Member" alias="Member"/>
+		<typeAlias type="com.yeoni.testSpring.chat.vo.Chatroom" alias="ChatRoom"/>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="/mappers/member-mapper.xml"/>
+		<mapper resource="/mappers/chat-mapper.xml"/>
+	</mappers>
+</configuration>
