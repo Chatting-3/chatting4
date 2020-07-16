@@ -66,13 +66,17 @@
 		<button onclick="location.href='outchatroom.do'"  >방 나가기</button>
 </div>
 <div id="chatRoomUserList">
-	
+
 </div>
 	
 	<br><br><br><br><br><br>
 	<script type="text/javascript">
 	//소켓 연결
 	let sock = new SockJS("<c:url value="/echoroom"/>");
+	
+	   //소켓연결
+	   sock.onopen =onOpen;
+
 	
 	//메세지전송
 	sock.onmessage = onMessage;
@@ -90,6 +94,15 @@
 		});
 	});
 	
+	   function onOpen(){
+		      var msgData ={
+		            user_nickname : $("#nickname").val(),
+		            chatroom_no : $("#chatroom_no").val(),
+		      }
+		      var jsonData = JSON.stringify(msgData);
+		      sock.send(jsonData);
+		   }
+
 	
 	function sendMessage(){
 		var msgData = {
@@ -101,25 +114,42 @@
 		sock.send(jsonData);
 	}
 	
+	
+	
+	
+	
+	
+	
+	
 	function onMessage(evt){
 		var data = evt.data;
 		var sessionid = null;
 		var message = null;
 		var chatroom = null;
 		
-		console.log("연결됐을시" + data);
-		var nickname = $("#nickname").val();
+		/* var nickname = $("#nickname").val(); */
 		
-		if(data == nickname){
-			var printHTML = "<div>";
-			printHTML += "<div>";
-			printHTML += "<strong>"+data+"</strong>";
-			printHTML += "</div>";
-			printHTML += "</div>";
-			
-			$("#chat").append(printHTML);
-			return;
-		}
+		console.log("데이타 : " + data);
+		
+		/* if(chatroom == currentchatroom){
+			if(nickname == data){
+				var printHTML = "<div>";
+				printHTML += "<div>";
+				printHTML += "<strong>"+nickname+"</strong>";
+				printHTML += "</div>";
+				printHTML += "</div>";
+				
+				$("#chatRoomUserList").append(printHTML);
+			}else if(nickname ^= data){
+				var printHTML = "<div>";
+				printHTML += "<div>";
+				printHTML += "<strong>"+data+"</strong>";
+				printHTML += "</div>";
+				printHTML += "</div>";
+				
+				$("#chatRoomUserList").append(printHTML);
+			}
+		}  */
 		
 		
 		//여기보다가 end
@@ -138,11 +168,26 @@
 		message = strArray[2];
 		console.log("chatroom :" + chatroom);
 		console.log("currentchatroom" + currentchatroom);
-		if(chatroom == currentchatroom){
+		console.log("message : " + message);
+		
+		if(message == "null"){
+			userEnter();
+			
+			return 0;
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		 if(chatroom == currentchatroom){
 			if(sessionid == currentuser_session){
 				var printHTML = "<div>";
 				printHTML += "<div>";
-				printHTML += "<strong>["+sessionid +"] -> "+message+"</strong>";
+				printHTML += "<strong>["+sessionid +"]    "+message+"</strong>";
 				printHTML += "</div>";
 				printHTML += "</div>";
 			
@@ -150,13 +195,13 @@
 			}else{
 				var printHTML = "<div>";
 				printHTML += "<div>";
-				printHTML += "<strong>["+sessionid+"] -> "+message+"</strong>";
+				printHTML += "<strong>["+sessionid+"]    "+message+"</strong>";
 				printHTML += "</div>";
 				printHTML += "</div>";
 				
 				$("#chatdata").append(printHTML);
 				
-			}
+			} 
 		
 		}else{
 			console.log("오류 ");
@@ -167,6 +212,55 @@
 	function onClose(evt){
 		$("#data").append("연결 끊김");
 	}  
+	
+	
+	function userEnter(){
+		console.log("오나?");
+		
+		var roomnumber = $("#chatroom_no").val();
+		
+		$.ajax({
+			url:"userlist.do",
+			data:{roomnumber:roomnumber},
+			success:function(data){
+				$userlist = $("#chatRoomUserList");
+				$userlist.html("");
+				
+				for(var i in data.list){
+					var $div = $("<div>");
+					var $nickname = $("<strong>").text(data.list[i].nickname);
+					
+					$div.append($nickname);
+					$userlist.append($div);
+				}
+			},
+			error:function(request, status, errorData){
+                alert("error code: " + request.status + "\n"
+                      +"message: " + request.responseText
+                      +"error: " + errorData);
+           }  
+		});
+	}
+	
+	
+	
+	
+	
 	</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

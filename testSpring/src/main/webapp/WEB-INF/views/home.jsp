@@ -56,7 +56,7 @@
 				 		<div class="panel-body">
 							<form id="login-form" method="post" action="loginProcess.do"> 
 								<div>
-									<input type="text" name="nickname" class="form-control"   value="${loginUser.nickname }" >
+									<input type="text" name="nickname" class="form-control"   value="${loginUser.nickname }"  readonly>
 								</div> 
 								<div> 
 									<button type="submit" class="form-control btn btn-primary">채팅 입장</button> 

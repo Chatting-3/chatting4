@@ -2,14 +2,21 @@ package com.yeoni.testSpring;
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.websocket.OnOpen;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,12 +28,14 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
+@Controller
 public class EchoRoomHandler extends TextWebSocketHandler{
 	
 	// (<"bang_id", 방ID>, <"session", 세션>) - (<"bang_id", 방ID>, <"session", 세션>) - (<"bang_id", 방ID>, <"session", 세션>) 형태 
 		private List<Map<String, Object>> sessionList = new ArrayList<Map<String, Object>>();
 		
 		private static Logger logger = LoggerFactory.getLogger(EchoHandler.class);
+		
 		
 		//클라이언트와 연결 된 후
 		@Override
@@ -48,11 +57,11 @@ public class EchoRoomHandler extends TextWebSocketHandler{
 			  logger.info("{} 연결됨", session.getId()); 
 			
 			  
-			  Map<String,Object> map2 = session.getAttributes();
-		         String nickname = (String)map2.get("nickname");
-		         System.out.println("로그인 한 아이디 : " + nickname);
-		         
-		         session.sendMessage(new TextMessage (nickname));
+//			  Map<String,Object> map2 = session.getAttributes();
+//		         String nickname = (String)map2.get("nickname");
+//		         System.out.println("로그인 한 닉네임 : " + nickname);
+//		         
+//		         session.sendMessage(new TextMessage (nickname));
 			
 		}
 	
@@ -93,7 +102,13 @@ public class EchoRoomHandler extends TextWebSocketHandler{
 //						System.out.println("확인" + mapToSend.get("msg"));
 						
 //						//이쪽부분에서 session교체를 해주면 되지않을까? http와 socket 
-						String jsonStr2 = chatroom_no + "|" +session.getAttributes().get("nickname")+ "|" + mapReceive.get("msg");
+						
+						Map<String,Object> userNicknamemap = session.getAttributes();
+						
+		                  String nickname = (String)userNicknamemap.get("nickname");
+
+						
+						String jsonStr2 = chatroom_no + "|" + nickname + "|" + mapReceive.get("msg");
 						
 //						String jsonStr = objectMapper.writeValueAsString(mapToSend);
 						System.out.println("확인 에욱" + jsonStr2);
@@ -129,4 +144,57 @@ public class EchoRoomHandler extends TextWebSocketHandler{
 				}	
 		}
 }
+		
+		
+		
+		
+		
+	      @RequestMapping("userlist.do")
+	      public void userlist(HttpServletResponse response ,String roomnumber) throws IOException {
+	         response.setContentType("application/json;charset=utf-8");
+	            ArrayList list = new ArrayList();
+	            System.out.println("roomnumber" + roomnumber);
+	           for(int i=0; i<sessionList.size(); i++) {
+	              Map<String, Object> mapSessionList = sessionList.get(i);
+	               
+	               //sessionList에 담긴 Map에 값 가져옴 
+	               String chatroom_no = (String)mapSessionList.get("chatroom_no");
+	               WebSocketSession sess = (WebSocketSession)mapSessionList.get("session");
+	                 
+	               if(chatroom_no.equals(roomnumber)) {
+	                  String str = (String)sess.getAttributes().get("nickname");
+	                  list.add(str);
+	                  
+	               }
+	           }
+	           JSONArray jarr = new JSONArray();
+	           
+	           for(Object str : list) {
+	              JSONObject jUser = new JSONObject();
+	              jUser.put("nickname", str);
+	              
+	              jarr.add(jUser);
+	              
+	           }
+	           JSONObject sendJson = new JSONObject();
+	           
+	           sendJson.put("list",jarr);
+	           
+	           PrintWriter out = response.getWriter();
+	           
+	           out.print(sendJson);
+	           out.flush();
+	           out.close();
+	           
+	      }
+
+		
+		
+		
+		
+		
 }
+
+
+
+
