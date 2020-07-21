@@ -4,7 +4,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link href="https://fonts.googleapis.com/css2?family=Black+And+White+Picture&family=Poor+Story&family=Single+Day&display=swap" rel="stylesheet">
 <style>
+	td{
+		font-family: 'Single Day', cursive;
+		font-size:30px;
+	}	
+
 	.table > thead > tr > th {
       text-align: center;
     }

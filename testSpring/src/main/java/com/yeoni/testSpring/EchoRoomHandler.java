@@ -76,6 +76,29 @@ public class EchoRoomHandler extends TextWebSocketHandler{
 			   ObjectMapper objectMapper = new ObjectMapper();
 			   Map<String, String> mapReceive = objectMapper.readValue(message.getPayload(), Map.class);
 			   
+//			   if(mapReceive.get("msg") == "퇴장") {
+//				   System.out.println("들어오니?");
+//				   for(int i=0; i<sessionList.size(); i++) {
+//						Map<String, Object> mapSessionList = sessionList.get(i);
+//						
+//						//sessionList에 담긴 Map에 값 가져옴 
+//						String chatroom_no = (String)mapSessionList.get("chatroom_no");
+//						WebSocketSession sess = (WebSocketSession)mapSessionList.get("session");
+//						
+//						Map<String,Object> userNicknamemap = session.getAttributes();
+//						
+//		                  String nickname = (String)userNicknamemap.get("nickname");
+//
+//						
+//						String jsonStr2 = chatroom_no + "|" + nickname + "|" + mapReceive.get("msg");
+//						
+////						String jsonStr = objectMapper.writeValueAsString(mapToSend);
+//						System.out.println("확인 에욱" + jsonStr2);
+//						sess.sendMessage(new TextMessage(jsonStr2));
+//				   }
+//				   
+//			   }
+			
 			   
 			   Map<String, Object> map = new HashMap<String, Object>();
 			   map.put("chatroom_no", mapReceive.get("chatroom_no"));
@@ -91,6 +114,8 @@ public class EchoRoomHandler extends TextWebSocketHandler{
 					//sessionList에 담긴 Map에 값 가져옴 
 					String chatroom_no = (String)mapSessionList.get("chatroom_no");
 					WebSocketSession sess = (WebSocketSession)mapSessionList.get("session");
+					
+					
 
 					//만약 Map값을 불러왔는데 방번호가 같다면?
 					if(chatroom_no.equals(mapReceive.get("chatroom_no"))) {
@@ -125,7 +150,7 @@ public class EchoRoomHandler extends TextWebSocketHandler{
 
 
 		@Override
-		public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+		public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws IOException {
 			//여기서 Db를 등록하면 되지않을까?
 			//List 삭제
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -142,6 +167,13 @@ public class EchoRoomHandler extends TextWebSocketHandler{
 					sessionList.remove(map);
 					break;
 				}	
+				Map<String,Object> userNicknamemap = session.getAttributes();
+				
+                String nickname = (String)userNicknamemap.get("nickname");
+
+				
+				String jsonStr2 = chatroom_no + "|" + nickname + "|" + "믜댜퇴장듀틔";
+				sess.sendMessage(new TextMessage(jsonStr2));
 		}
 }
 		
@@ -149,7 +181,7 @@ public class EchoRoomHandler extends TextWebSocketHandler{
 		
 		
 		
-	      @RequestMapping("userlist.do")
+	      @RequestMapping("enteruserlist.do")
 	      public void userlist(HttpServletResponse response ,String roomnumber) throws IOException {
 	         response.setContentType("application/json;charset=utf-8");
 	            ArrayList list = new ArrayList();
@@ -188,8 +220,6 @@ public class EchoRoomHandler extends TextWebSocketHandler{
 	           
 	      }
 
-		
-		
 		
 		
 		

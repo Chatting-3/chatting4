@@ -4,18 +4,143 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link href="https://fonts.googleapis.com/css2?family=Black+And+White+Picture&family=Poor+Story&display=swap" rel="stylesheet">
 <style>
+		#mymsg {
+			border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+			border-bottom-right-radius: 5px;
+			border-bottom-left-radius: 5px;
+			position: relative;
+			background: #ffff00;
+			border: 2px solid #ffff00;
+		}
+		#mymsg:after, #mymsg:before {
+			left: 100%;
+			top: 50%;
+			border: solid transparent;
+			content: " ";
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
+		}
+		
+		#mymsg:after {
+			border-color: rgba(255, 255, 0, 0);
+			border-left-color: #ffff00;
+			border-width: 5px;
+			margin-top: -5px;
+		}
+		#mymsg:before {
+			border-color: rgba(255, 255, 0, 0);
+			border-left-color: #ffff00;
+			border-width: 7px;
+			margin-top: -7px;
+		}
+		.interval{
+			margin-top:10px;
+			margin-right:10px;
+		}
+		.intervalgreet{
+			margin-top:10px;
+			margin-bottom:10px;
+		}
+		
+		
+		#othermsg {
+			border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+			border-bottom-right-radius: 5px;
+			border-bottom-left-radius: 5px;
+			position: relative;
+			background: #ffffff;
+			border: 2px solid #ffffff;
+		}
+		#othermsg:after, #othermsg:before {
+			right: 100%;
+			top: 50%;
+			border: solid transparent;
+			content: " ";
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
+		}
+		
+		#othermsg:after {
+			border-color: rgba(255, 255, 255, 0);
+			border-right-color: #ffffff;
+			border-width: 5px;
+			margin-top: -5px;
+		}
+		#othermsg:before {
+			border-color: rgba(255, 255, 255, 0);
+			border-right-color: #ffffff;
+			border-width: 8px;
+			margin-top: -8px;
+		}
+
+	  p{
+        font-family: 'Black And White Picture', sans-serif;
+      }
+      p.a{
+      font-size: 50px;
+      	font-weight:400;
+      }
+      strong{
+		font-family: 'Poor Story', cursive;
+      }
+      strong.a{
+      	font-size : 18px;
+      }
+      strong.b{
+      	font-size : 28px;
+      }
+
+
+		.container {
+		    overflow-y: scroll;
+		    overflow-x:hidden;
+		    word-break:break-all;
+		    height: 90%;
+		  }
+		  .container::-webkit-scrollbar {
+		    width: 10px;
+		  }
+		  .container::-webkit-scrollbar-thumb {
+		    background-color: #2f3542;
+		    border-radius: 10px;
+		    background-clip: padding-box;
+		    border: 2px solid transparent;
+		  }
+		  .container::-webkit-scrollbar-track {
+		    background-color: grey;
+		    border-radius: 10px;
+		    box-shadow: inset 0px 0px 5px white;
+		  }
+		  
+  		#chatRoomUserList{
+  			margin-left:200px;
+  			width: 100px;
+            height: 400px;
+            border: 2px solid black;
+            background: white;
+  		}
 	    #container {
-	    	margin-left:430px;
+	    	
             width: 400px;
             height: 400px;
-            border: 1px solid black;
+            border: 2px solid black;
             background: ivory;
         }
         #chat {
             height: 90%;
             word-break:break-all;
             overflow-y: scroll;
+            background-image: url("${pageContext.request.contextPath}/resources/img/b.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
         }
         #chatForm {
             height: 10%;
@@ -34,7 +159,42 @@
             background: black;
             color: white;
         }
-
+		
+		
+		
+		#enterdiv {
+			margin-left:20px;
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+			border-bottom-right-radius: 20px;
+			border-bottom-left-radius: 20px;
+			position: relative;
+			background: #caeaff;
+			border: 5px solid #caeaff;
+		}
+		#enterdiv:after, #enterdiv:before {
+			bottom: 100%;
+			left: 50%;
+			border: solid transparent;
+			content: " ";
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
+		}
+		
+		#enterdiv:after {
+			border-color: rgba(202, 234, 255, 0);
+			border-bottom-color: #caeaff;
+			border-width: NaNpx;
+			margin-left: -NaNpx;
+		}
+		#enterdiv:before {
+			border-color: rgba(202, 234, 255, 0);
+			border-bottom-color: #caeaff;
+			border-width: NaNpx;
+			margin-left: -NaNpx;
+		}
 	
 </style>
 <meta charset="UTF-8">
@@ -45,12 +205,19 @@
 </head>
 <body>
 <br><br>
-<h1 align="center">${loginUser.nickname }님 ${cr.chatroomname }방에 오신것을 환영합니다!</h1>
+<p class="a" align="center">${loginUser.nickname }님 ${cr.chatroomname }방에 오신것을 환영합니다!</p>
 <br>
 <h3> </h3>
-	
-<div id="container">
-	<div id="chat">
+<table>
+<tr>
+<td>
+<div id="chatRoomUserList">
+
+</div>
+</td>
+<td>
+<div id="container" >
+	<div id="chat" class="container">
 		<div id="chatdata">
 			<input type="hidden" value="${loginUser.id }" id="userid">
 			<input type="hidden" value="${loginUser.nickname }" id="nickname">
@@ -65,9 +232,10 @@
 		<br>
 		<button onclick="location.href='outchatroom.do'"  >방 나가기</button>
 </div>
-<div id="chatRoomUserList">
+</td>
 
-</div>
+</tr>
+</table>
 	
 	<br><br><br><br><br><br>
 	<script type="text/javascript">
@@ -93,17 +261,19 @@
 			$("#message").val('').focus();
 		});
 	});
-	
+	/* --------------------------------------------------------------------------------------------------------------- */
 	   function onOpen(){
+		   
+		   
 		      var msgData ={
 		            user_nickname : $("#nickname").val(),
-		            chatroom_no : $("#chatroom_no").val(),
+		            chatroom_no : $("#chatroom_no").val()
 		      }
 		      var jsonData = JSON.stringify(msgData);
 		      sock.send(jsonData);
 		   }
 
-	
+	   /* --------------------------------------------------------------------------------------------------------------- */
 	function sendMessage(){
 		var msgData = {
 				user_nickname : $("#nickname").val(),
@@ -114,22 +284,19 @@
 		sock.send(jsonData);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	/* --------------------------------------------------------------------------------------------------------------- */
 	function onMessage(evt){
 		var data = evt.data;
 		var sessionid = null;
 		var message = null;
 		var chatroom = null;
 		
+		
 		/* var nickname = $("#nickname").val(); */
 		
 		console.log("데이타 : " + data);
+		
+		
 		
 		/* if(chatroom == currentchatroom){
 			if(nickname == data){
@@ -172,35 +339,47 @@
 		
 		if(message == "null"){
 			userEnter();
-			
+			var printHTML = "<div>";
+			printHTML += "<div class='intervalgreet'>";
+			printHTML += "<strong class='a' id='enterdiv'>&nbsp;[ "+sessionid +" ]님께서 입장하셨습니다   "+"&nbsp;</strong>";
+			printHTML += "</div>";
+			printHTML += "</div>";
+		
+			$("#chat").append(printHTML);
 			return 0;
 		}
 		
+		if(message == "믜댜퇴장듀틔"){
+			userEnter();
+			var printHTML = "<div>";
+			printHTML += "<div class='interval'>";
+			printHTML += "<strong class='a'>[ "+sessionid +" ]님께서 퇴장하셨습니다   "+"</strong>";
+			printHTML += "</div>";
+			printHTML += "</div>";
 		
-		
-		
-		
-		
-		
+			$("#chat").append(printHTML);
+			return 0;
+		}
 		
 		 if(chatroom == currentchatroom){
 			if(sessionid == currentuser_session){
 				var printHTML = "<div>";
-				printHTML += "<div>";
-				printHTML += "<strong>["+sessionid +"]    "+message+"</strong>";
+				printHTML += "<div class='interval'>";
+				printHTML += "<strong class='a' style='float:right;' id='mymsg'>&nbsp;"+message+"&nbsp;</strong>";
 				printHTML += "</div>";
 				printHTML += "</div>";
-			
-				$("#chatdata").append(printHTML);
+				printHTML += "<br clear='both'>";
+				$("#chat").append(printHTML);
+				$("#chat").scrollTop($("#chat")[0].scrollHeight);
 			}else{
 				var printHTML = "<div>";
-				printHTML += "<div>";
-				printHTML += "<strong>["+sessionid+"]    "+message+"</strong>";
+				printHTML += "<div class='interval'>";
+				printHTML += "&nbsp;&nbsp;<strong class='a' style='float:left;' id='othermsg'>&nbsp;"+sessionid+" :   "+message+"&nbsp;&nbsp;</strong>";
 				printHTML += "</div>";
 				printHTML += "</div>";
-				
-				$("#chatdata").append(printHTML);
-				
+				printHTML += "<br clear='both'>";
+				$("#chat").append(printHTML);
+				$("#chat").scrollTop($("#chat")[0].scrollHeight);
 			} 
 		
 		}else{
@@ -208,27 +387,40 @@
 		}
 		
 	}
-	
+	/* --------------------------------------------------------------------------------------------------------------- */
 	function onClose(evt){
 		$("#data").append("연결 끊김");
+		
+		var msgData = {
+				user_nickname : $("#nickname").val(),
+				chatroom_no : $("#chatroom_no").val(),
+				msg : "퇴장"
+		};
+		
+		console.log(evt.data);
+		var jsonData = JSON.stringify(msgData);
+		sock.send(jsonData);
 	}  
 	
-	
+	/* --------------------------------------------------------------------------------------------------------------- */
 	function userEnter(){
-		console.log("오나?");
 		
+		console.log("오나?");
 		var roomnumber = $("#chatroom_no").val();
 		
+		
 		$.ajax({
-			url:"userlist.do",
+			url:"enteruserlist.do",
 			data:{roomnumber:roomnumber},
 			success:function(data){
 				$userlist = $("#chatRoomUserList");
 				$userlist.html("");
 				
+				
 				for(var i in data.list){
 					var $div = $("<div>");
-					var $nickname = $("<strong>").text(data.list[i].nickname);
+					var $nickname = $("<strong class='b'>").text(data.list[i].nickname);
+					
 					
 					$div.append($nickname);
 					$userlist.append($div);
@@ -240,6 +432,29 @@
                       +"error: " + errorData);
            }  
 		});
+		
+	/* 	$.ajax({
+			url:"entergreet.do",
+			data:{roomnumber:roomnumber},
+			success:function(data){
+				$entergreet = $("#chat");
+				
+				
+				for(var i in data.greet){
+					var $span = $("<span>");
+					var $greet = $("<strong>").text(data.greet[i].nickname + "님께서 입장하셨습니다");
+					
+					
+					$span.append($greet);
+					$entergreet.append($span);
+				}
+			},
+			error:function(request, status, errorData){
+                alert("error code: " + request.status + "\n"
+                      +"message: " + request.responseText
+                      +"error: " + errorData);
+           }  
+		}); */
 	}
 	
 	
@@ -249,18 +464,4 @@
 	</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
