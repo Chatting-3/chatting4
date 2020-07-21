@@ -121,7 +121,6 @@
 		  }
 		  
   		#chatRoomUserList{
-  			margin-left:200px;
   			width: 100px;
             height: 400px;
             border: 2px solid black;
@@ -195,20 +194,108 @@
 			border-width: NaNpx;
 			margin-left: -NaNpx;
 		}
-	
+		
+		
+		
+.hidden {
+  display:none;
+  visibility:hidden;
+}
+
+/* 버튼으로 사용할 라벨 디자인 */
+.button {
+  font-size:19px;
+  font-weight:600;
+  vertical-align:middle;
+  cursor:pointer;
+}
+
+/* 모달 윈도우 디자인 */
+.box_modal {
+  position:absolute;
+  display:block;
+  width:517px;
+  height:410px;
+  top:20%;
+  left:30%;
+  margin-top:-75px;
+  margin-left:-150px;
+  overflow:hidden;
+  /* 아래 부분은 애니메이션 효과를 위한 부분 */
+  visibility: collapse;
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+  -webkit-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  transform: scale(0, 0);
+}
+.box_modal:hover {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+/* 닫기 버튼으로 사용할 라벨 */
+.closer {
+  position:absolute;
+  width:30px;
+  height:30px;
+  top:3px;
+  right:3px;
+  background:#eee;
+  border-left:1px solid #386980;
+  border-bottom:1px solid #386980;
+  text-align:center;
+  line-height:26px;
+  font-size:16x;
+  cursor:pointer;
+}
+.text {
+  display:inline-block;
+}
+.text h3 {
+  font-size:19px;
+  margin:0;
+}
+.text p {
+  font-size:13px;
+}
+
+/* 모달 윈도우가 팝업되는 코어 소스 */
+input#modal[type=checkbox]:checked ~ .box_modal {
+  visibility: visible;
+  -webkit-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  transform: scale(1, 1);
+}
 </style>
+
+
 <meta charset="UTF-8">
 <title>Insert title here</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<!-- <script src="lib/sockjs.min.js"></script> -->
 	<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 </head>
 <body>
 <br><br>
 <p class="a" align="center">${loginUser.nickname }님 ${cr.chatroomname }방에 오신것을 환영합니다!</p>
 <br>
 <h3> </h3>
-<table>
+<div class="wrap">
+  <label for="modal" class="button">채팅방 열기</label>
+</div>
+
+
+<input type="checkbox" id="modal" class="hidden">
+<div class="box_modal">
+  <label for="modal" class="closer"><strong><b>X</b></strong></label>
+  <div class="text">
+    <table>
 <tr>
 <td>
 <div id="chatRoomUserList">
@@ -226,18 +313,29 @@
 		</div>
 	</div>
 		<form id="chatForm">
-			<input type="text" id="message" >
+			<input type="text" id="message" autocomplete=off >
 			<button id="sendBtn" >send</button>
 		</form>
-		<br>
-		<button onclick="location.href='outchatroom.do'"  >방 나가기</button>
+		
 </div>
 </td>
 
 </tr>
 </table>
 	
-	<br><br><br><br><br><br>
+  </div>
+</div>
+<br>
+		<button onclick="location.href='outchatroom.do'"  >방 나가기</button>
+
+	<script>
+	$(function() {
+		$( ".box_modal" ).draggable();
+	});
+	</script>
+	<br><br><br><br><br><br><br><br><br><br><br><br>
+	<br><br><br><br><br><br><br><br><br><br><br><br>
+	<br><br><br><br><br><br><br><br><br><br><br><br>
 	<script type="text/javascript">
 	//소켓 연결
 	let sock = new SockJS("<c:url value="/echoroom"/>");
